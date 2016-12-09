@@ -2,41 +2,27 @@
 using System.Collections;
 
 [RequireComponent(typeof(AudioSource))]
-public class MusicManager : MonoBehaviour {
-    private static MusicManager musicManager;
+public class MusicManager : Singleton<MusicManager> {
     private AudioSource audioSource;
     private float baseVolume;
     private float targetVolume;
     private bool done = false;
 
-	void Start () {
-        if (musicManager != null && musicManager != this) {
-            Destroy(gameObject);
-        }
-        else musicManager = this;
-        audioSource = GetComponent<AudioSource>();
+    protected MusicManager() { }
+
+	void Awake () {
+        audioSource = transform.GetOrAddComponent<AudioSource>();
         baseVolume = audioSource.volume;
-        DontDestroyOnLoad(gameObject);
 	}
 
-    private static MusicManager GetInstance() {
-        if (musicManager == null) {
-            GameObject obj = new GameObject();
-            musicManager = obj.AddComponent<MusicManager>();
-            musicManager.audioSource = obj.AddComponent<AudioSource>();
-            obj.name = "AudioManager";
-        }
-        return musicManager;
-    }
-
     public static void PlayMusic(AudioClip music, float volume = 1.0f) {
-        GetInstance().audioSource.PlayOneShot(music, volume);
+        Instance.audioSource.PlayOneShot(music, volume);
     }
     
     public static void Fade(AudioClip music, float volume = 1.0f, bool loop = false) {
-        GetInstance().targetVolume = GetInstance().baseVolume * volume;
-        GetInstance().audioSource.loop = loop;
-        GetInstance().FadeTo(music);
+        Instance.targetVolume = Instance.baseVolume * volume;
+        Instance.audioSource.loop = loop;
+        Instance.FadeTo(music);
     }
 
     private void FadeTo(AudioClip music) {
