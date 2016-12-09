@@ -11,9 +11,9 @@ public class DestroyTimer : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        /*if(PauseManager.IsPaused()) {
+        if(PauseManager.IsPaused()) {
             startTime += Time.deltaTime;
-        }*/
+        }
         if (Time.time - startTime >= duration) Destroy(gameObject);
 	}
 }
