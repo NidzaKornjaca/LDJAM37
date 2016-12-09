@@ -1,16 +1,18 @@
 using System;
 using System.Collections;
 using UnityEngine;
+using UnityStandardAssets.Characters.FirstPerson;
 
 namespace UnityStandardAssets.Utility
 {
     public class DragRigidbody : MonoBehaviour
     {
-        const float k_Spring = 50.0f;
+        const float k_Spring = 800.0f;
         const float k_Damper = 5.0f;
         const float k_Drag = 10.0f;
         const float k_AngularDrag = 5.0f;
-        const float k_Distance = 0.2f;
+        const float k_Distance = 0.5f;
+        const float maxDistance = 1.5f;
         const bool k_AttachToCenterOfMass = false;
 
         private SpringJoint m_SpringJoint;
@@ -36,7 +38,7 @@ namespace UnityStandardAssets.Utility
                 return;
             }
             // We need to hit a rigidbody that is not kinematic
-            if (!hit.rigidbody || hit.rigidbody.isKinematic)
+            if (!hit.rigidbody || hit.rigidbody.isKinematic || hit.distance > maxDistance)
             {
                 return;
             }
@@ -63,6 +65,9 @@ namespace UnityStandardAssets.Utility
 
         private IEnumerator DragObject(float distance)
         {
+            FirstPersonController fc =  GetComponent<FirstPersonController>();
+            float oldSpeed = fc.m_WalkSpeed;
+            fc.m_WalkSpeed = (m_SpringJoint.connectedBody.mass > 1 )? oldSpeed / m_SpringJoint.connectedBody.mass : oldSpeed;
             var oldDrag = m_SpringJoint.connectedBody.drag;
             var oldAngularDrag = m_SpringJoint.connectedBody.angularDrag;
             m_SpringJoint.connectedBody.drag = k_Drag;
@@ -80,6 +85,7 @@ namespace UnityStandardAssets.Utility
                 m_SpringJoint.connectedBody.angularDrag = oldAngularDrag;
                 m_SpringJoint.connectedBody = null;
             }
+            fc.m_WalkSpeed = oldSpeed;
         }
 
 
