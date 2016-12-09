@@ -3,7 +3,9 @@ using UnityEngine.Events;
 
 public class PauseManager : Singleton<PauseManager> {
 	private bool paused = false;
-    private UnityEvent onPause, onUnpause; 
+    private UnityEvent onPause, onUnpause;
+
+    protected PauseManager() { }
 
     void Awake() {
         if (onPause == null) onPause = new UnityEvent();
