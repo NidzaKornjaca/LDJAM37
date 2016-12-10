@@ -16,14 +16,18 @@ public class HoverHighlighter : MonoBehaviour {
         {
             return;
         }
-        if (hit.distance < 1.5f)
+        if (hit.distance < 2f)
         {
-            GetComponent<Renderer>().material.shader = Shader.Find("Tessellation/Bumped Specular (smooth)");
+            Renderer ren = GetComponent<Renderer>();
+            if (ren)
+                ren.material.shader = Shader.Find("Reflective/Parallax Diffuse");
         }
     }
 
     void OnMouseExit() {
-        GetComponent<Renderer>().material.shader = old;
+        Renderer ren = GetComponent<Renderer>();
+        if(ren)
+            ren.material.shader = old;
     }
 
 }

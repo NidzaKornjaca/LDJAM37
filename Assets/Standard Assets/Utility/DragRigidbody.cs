@@ -12,7 +12,7 @@ namespace UnityStandardAssets.Utility
         const float k_Drag = 15f;
         const float k_AngularDrag = 10f;
         const float k_Distance = 0.005f;
-        const float maxDistance = 1f;
+        const float maxDistance = 2f;
         const bool k_AttachToCenterOfMass = false;
 
         private SpringJoint m_SpringJoint;
