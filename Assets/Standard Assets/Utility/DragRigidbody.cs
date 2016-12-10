@@ -7,12 +7,12 @@ namespace UnityStandardAssets.Utility
 {
     public class DragRigidbody : MonoBehaviour
     {
-        const float k_Spring = 800.0f;
+        const float k_Spring = 2500.0f;
         const float k_Damper = 5.0f;
-        const float k_Drag = 10.0f;
-        const float k_AngularDrag = 5.0f;
-        const float k_Distance = 0.5f;
-        const float maxDistance = 1.5f;
+        const float k_Drag = 15f;
+        const float k_AngularDrag = 10f;
+        const float k_Distance = 0.005f;
+        const float maxDistance = 1f;
         const bool k_AttachToCenterOfMass = false;
 
         private SpringJoint m_SpringJoint;
@@ -73,7 +73,7 @@ namespace UnityStandardAssets.Utility
             m_SpringJoint.connectedBody.drag = k_Drag;
             m_SpringJoint.connectedBody.angularDrag = k_AngularDrag;
             var mainCamera = FindCamera();
-            while (Input.GetMouseButton(0))
+            while (Input.GetMouseButton(0) && m_SpringJoint.connectedBody.GetComponent<Renderer>().isVisible)
             {
                 var ray = mainCamera.ScreenPointToRay(Input.mousePosition);
                 m_SpringJoint.transform.position = ray.GetPoint(distance);
