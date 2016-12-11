@@ -39,4 +39,11 @@ public class PauseManager : Singleton<PauseManager> {
     public static bool IsPaused(){
 		return Instance.paused;
 	}
+
+    public static void TogglePause()
+    {
+        Instance.paused = !(Instance.paused);
+        if (Instance.paused) Instance.onPause.Invoke();
+        else Instance.onUnpause.Invoke();
+    }
 }

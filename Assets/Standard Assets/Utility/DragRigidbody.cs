@@ -65,9 +65,9 @@ namespace UnityStandardAssets.Utility
 
         private IEnumerator DragObject(float distance)
         {
-            FirstPersonController fc =  GetComponent<FirstPersonController>();
+            FirstPersonController fc = GetComponent<FirstPersonController>();
             float oldSpeed = fc.m_WalkSpeed;
-            fc.m_WalkSpeed = (m_SpringJoint.connectedBody.mass > 1 )? oldSpeed / m_SpringJoint.connectedBody.mass : oldSpeed;
+            fc.m_WalkSpeed = (m_SpringJoint.connectedBody.mass > 1) ? oldSpeed / m_SpringJoint.connectedBody.mass : oldSpeed;
             var oldDrag = m_SpringJoint.connectedBody.drag;
             var oldAngularDrag = m_SpringJoint.connectedBody.angularDrag;
             m_SpringJoint.connectedBody.drag = k_Drag;
