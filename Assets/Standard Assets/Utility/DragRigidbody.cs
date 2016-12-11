@@ -84,11 +84,14 @@ namespace UnityStandardAssets.Utility
                 m_SpringJoint.transform.position = ray.GetPoint(distance);
                 yield return null;
             }
-            if (m_SpringJoint.connectedBody)
+            if (m_SpringJoint)
             {
-                m_SpringJoint.connectedBody.drag = oldDrag;
-                m_SpringJoint.connectedBody.angularDrag = oldAngularDrag;
-                m_SpringJoint.connectedBody = null;
+                if (m_SpringJoint.connectedBody) {
+                    m_SpringJoint.connectedBody.drag = oldDrag;
+                    m_SpringJoint.connectedBody.angularDrag = oldAngularDrag;
+                }
+                //m_SpringJoint.connectedBody = null;
+                Destroy(m_SpringJoint.gameObject);
             }
             fc.m_WalkSpeed = oldSpeed;
         }
