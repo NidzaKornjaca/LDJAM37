@@ -3,6 +3,7 @@ using System.Collections;
 using UnityEngine;
 using UnityStandardAssets.Characters.FirstPerson;
 
+
 namespace UnityStandardAssets.Utility
 {
     public class DragRigidbody : MonoBehaviour
@@ -20,6 +21,10 @@ namespace UnityStandardAssets.Utility
 
         private void Update()
         {
+            if (PauseManager.IsPaused())
+            {
+                return;
+            }
             // Make sure the user pressed the mouse down
             if (!Input.GetMouseButtonDown(0))
             {

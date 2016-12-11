@@ -13,6 +13,9 @@ public class HighlightManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+        if (PauseManager.IsPaused()) {
+            return;
+        }
         Camera mainCamera = Camera.main;
         RaycastHit hit = new RaycastHit();
         if (
