@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class DynamicGameManager : Singleton<GameManager> {
+public class DynamicGameManager : MonoBehaviour {
 
+    public float forceMultiplier = 200f;
     public Rect dimenzijaSobe;
 
     public TriggerArea taPrefab;
@@ -12,7 +13,9 @@ public class DynamicGameManager : Singleton<GameManager> {
 
     public GameObject[] spawnPoints;
 
-    public GameObject[] namestajPrefabs;
+    public GameObject[] namestajPrefabsH;
+    public GameObject[] namestajPrefabsV;
+
     public List<GameObject> namestajNaSceni;
     public List<GameObject> trenutni;
 
@@ -26,6 +29,8 @@ public class DynamicGameManager : Singleton<GameManager> {
     void NextTarget() {
         MakeTriggerArea();
         trenutni.Clear();
+        if (namestajNaSceni.Count == 0)
+            return;
         GameObject pom = namestajNaSceni[Random.Range(0, namestajNaSceni.Count)];
         if (pom.transform.childCount > 0)
         {
@@ -63,7 +68,7 @@ public class DynamicGameManager : Singleton<GameManager> {
         float x = Random.Range(dimenzijaSobe.xMin, dimenzijaSobe.xMax);
         float y = Random.Range(dimenzijaSobe.yMin, dimenzijaSobe.yMax);
 
-        return new Vector3(x,y,0);
+        return new Vector3(x,0,y);
     }
 
 
@@ -74,11 +79,42 @@ public class DynamicGameManager : Singleton<GameManager> {
         point = point.normalized;
         point = prozor + point;
 
+        GameObject inst;
+
+        if (Random.Range(0, 2) == 1)
+        {
+            inst = namestajPrefabsH[Random.Range(0, namestajPrefabsH.Length)];
+            inst = Instantiate(inst, point, Quaternion.identity);
+            Vector3 ugao = Vector3.RotateTowards(inst.transform.forward, prozor, 2 * Mathf.PI, 0.0f);
+      //      inst.transform.rotation = Quaternion.LookRotation(ugao);
+        }
+        else {
+            inst = namestajPrefabsV[Random.Range(0, namestajPrefabsV.Length)];
+            inst = Instantiate(inst, point, Quaternion.identity);
+            Vector3 ugao = Vector3.RotateTowards(inst.transform.up, prozor, 2 * Mathf.PI, 0.0f);
+       //     inst.transform.rotation = Quaternion.LookRotation(ugao);
+        }
+
+        Vector3 normVect = (tackaUSobi - point).normalized;
 
 
-
-
+        inst.GetComponent<Rigidbody>().AddForce(normVect*forceMultiplier,ForceMode.Acceleration);
     }
 
+    void OnDrawGizmos()
+    {
+        Vector3 pos = new Vector3(dimenzijaSobe.x, 0, dimenzijaSobe.y);
+        Gizmos.DrawWireSphere(pos, 0.5f);
+        Gizmos.DrawWireSphere(pos+ new Vector3(dimenzijaSobe.width, 0), 0.5f);
+        Gizmos.DrawWireSphere(pos + new Vector3(dimenzijaSobe.width, 0, dimenzijaSobe.height), 0.5f);
+        Gizmos.DrawWireSphere(pos + new Vector3(0, 0, dimenzijaSobe.height), 0.5f);
+    }
+
+    void Update() {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            UbaciUSobu();
+        }
+    }
 
 }
