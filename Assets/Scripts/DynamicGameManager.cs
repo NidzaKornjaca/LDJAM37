@@ -228,4 +228,9 @@ public class DynamicGameManager : MonoBehaviour {
     public static bool IsGameOver() {
         return instance.isGameOver;
     }
+
+    public static int Score() {
+        return instance.currentHighScore;
+    }
+
 }
