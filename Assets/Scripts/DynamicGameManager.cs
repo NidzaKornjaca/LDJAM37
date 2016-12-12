@@ -5,6 +5,8 @@ using UnityEngine.Events;
 
 public class DynamicGameManager : MonoBehaviour {
 
+    private static DynamicGameManager instance = null;
+
     public float forceMultiplier = 200f;
     public Rect dimenzijaSobe;
 
@@ -17,7 +19,12 @@ public class DynamicGameManager : MonoBehaviour {
     public GameObject[] namestajPrefabsV;
 
     public List<GameObject> namestajNaSceni;
-    public List<GameObject> trenutni;
+    public GameObject trenutni;
+
+    void Awake() {
+        if (instance == null)
+            instance = this;
+    }
 
 	// Use this for initialization
 	void Start () {
@@ -28,30 +35,18 @@ public class DynamicGameManager : MonoBehaviour {
 
     void NextTarget() {
         MakeTriggerArea();
-        trenutni.Clear();
         if (namestajNaSceni.Count == 0)
             return;
-        GameObject pom = namestajNaSceni[Random.Range(0, namestajNaSceni.Count)];
-        if (pom.transform.childCount > 0)
-        {
-            for (int i = 0; i < pom.transform.childCount; i++)
-                trenutni.Add(pom.transform.GetChild(i).gameObject);
-        }
-        else {
-            trenutni.Add(pom);
-        }        
+        trenutni = namestajNaSceni[Random.Range(0, namestajNaSceni.Count)];
+        
     }
 
     void Calculate(Collider other) {
-        for (int i = 0; i < trenutni.Count; i++)
+        if (other.gameObject == trenutni)
         {
-            if (other.gameObject == trenutni[i])
-            {
-                trenutni.RemoveAt(i);
-                if(trenutni.Count == 0)
-                    NextTarget();
-            }
-        }
+            trenutni = null;
+            NextTarget();
+        }   
     }
 
 
@@ -85,20 +80,25 @@ public class DynamicGameManager : MonoBehaviour {
         {
             inst = namestajPrefabsH[Random.Range(0, namestajPrefabsH.Length)];
             inst = Instantiate(inst, point, Quaternion.identity);
-            Vector3 ugao = Vector3.RotateTowards(inst.transform.forward, prozor, 2 * Mathf.PI, 0.0f);
+      //      Vector3 ugao = Vector3.RotateTowards(inst.transform.forward, prozor, 2 * Mathf.PI, 0.0f);
       //      inst.transform.rotation = Quaternion.LookRotation(ugao);
         }
         else {
             inst = namestajPrefabsV[Random.Range(0, namestajPrefabsV.Length)];
             inst = Instantiate(inst, point, Quaternion.identity);
-            Vector3 ugao = Vector3.RotateTowards(inst.transform.up, prozor, 2 * Mathf.PI, 0.0f);
+       //     Vector3 ugao = Vector3.RotateTowards(inst.transform.up, prozor, 2 * Mathf.PI, 0.0f);
        //     inst.transform.rotation = Quaternion.LookRotation(ugao);
         }
 
         Vector3 normVect = (tackaUSobi - point).normalized;
 
+        inst.GetComponent<Rigidbody>().AddForce(normVect * forceMultiplier, ForceMode.Acceleration);
 
-        inst.GetComponent<Rigidbody>().AddForce(normVect*forceMultiplier,ForceMode.Acceleration);
+        for (int i = 0; i < inst.transform.childCount; i++) {
+            namestajNaSceni.Add(inst.transform.GetChild(i).gameObject);
+        }
+        
+        
     }
 
     void OnDrawGizmos()
@@ -116,5 +116,32 @@ public class DynamicGameManager : MonoBehaviour {
             UbaciUSobu();
         }
     }
+
+
+    void OnTriggerExit(Collider other) {
+        Destroy(other);
+    }
+
+
+    public static void UpisiSe(GameObject other) {
+        other.transform.DetachChildren();
+        instance.namestajNaSceni.Add(other);
+    }
+
+    public static void IspisiSe(GameObject other) {
+        for (int i = 0; i < instance.namestajNaSceni.Count; i++)
+        {
+            if (other == instance.namestajNaSceni[i])
+            {
+                instance.namestajNaSceni.RemoveAt(i);
+                break;
+            }
+        }
+        if (instance.trenutni == other) {
+            instance.trenutni = null;
+            instance.NextTarget();
+        }
+    }
+
 
 }
