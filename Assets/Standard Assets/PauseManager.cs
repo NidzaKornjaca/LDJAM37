@@ -40,6 +40,7 @@ public class PauseManager : Singleton<PauseManager> {
     }
 
     public static bool IsPaused(){
+        if (!Instance) return false;
 		return Instance.paused;
 	}
 
