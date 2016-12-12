@@ -12,7 +12,6 @@ public class Timer : MonoBehaviour {
     public void StartTimer(float time) {
         maxTime = time;
         timeLeft = time;
-        gameObject.SetActive(true);
     }
 
     public void Subscribe(UnityAction action) {
@@ -37,7 +36,6 @@ public class Timer : MonoBehaviour {
         
         if (timeLeft < 0) {
             timerOff.Invoke();
-            gameObject.SetActive(false);
             if (timeBar != null) timeBar.Set(0f);
         }
         else if (timeBar != null) timeBar.Set(timeLeft / maxTime);

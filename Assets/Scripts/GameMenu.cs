@@ -11,7 +11,6 @@ public class GameMenu : MonoBehaviour {
 
         PauseManager.SubscribeOnPause(OnPause);
         PauseManager.SubscribeOnUnpause(OnUnpause);
-
         transform.gameObject.SetActive(false);
 
 	}
@@ -19,13 +18,11 @@ public class GameMenu : MonoBehaviour {
     public void OnPause() {
         oldTImeScale = Time.timeScale;
         Time.timeScale = 0;
-        Cursor.visible = true;
         transform.gameObject.SetActive(true);
     }
 
     public void OnUnpause() {
         Time.timeScale = oldTImeScale;
-        Cursor.visible = false;
         transform.gameObject.SetActive(false);
     }
 

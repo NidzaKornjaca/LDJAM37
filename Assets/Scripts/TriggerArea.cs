@@ -6,6 +6,8 @@ using UnityEngine.Events;
 public class TriggerArea : MonoBehaviour {
 
     public class ColliderEvent : UnityEvent<Collider> { }
+    [SerializeField]
+    private AudioClip efx;
 
     private ColliderEvent m_event;
 
@@ -23,6 +25,10 @@ public class TriggerArea : MonoBehaviour {
 
     public void UnSubsribe(UnityAction<Collider> action) {
         m_event.RemoveListener(action);
+    }
+
+    public void PlayEfx() {
+        AudioSource.PlayClipAtPoint(efx,transform.position);
     }
 
 }

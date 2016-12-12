@@ -11,6 +11,9 @@ public class DynamicGameManager : MonoBehaviour {
     public float secsPerRound = 30f;
     private float currenSecsPerRound;
     private Timer timer;
+    [SerializeField]
+    private Timer spawnTimer;
+    public float initialSpawnTime = 30f;
     private static DynamicGameManager instance = null;
 
     public float forceMultiplier = 200f;
@@ -48,7 +51,13 @@ public class DynamicGameManager : MonoBehaviour {
 
         if(timer)
             timer.Subscribe(GameOver);
-	}
+        if (spawnTimer)
+        {
+            spawnTimer.Subscribe(UbaciUSobu);
+            spawnTimer.StartTimer(initialSpawnTime);
+        }
+	} 
+
 
     void NextTarget() {
         MakeTriggerArea();
@@ -59,7 +68,7 @@ public class DynamicGameManager : MonoBehaviour {
         HighlightObject(trenutni);
         currenSecsPerRound = secsPerRound - currentHighScore / 30;
         if(timer)
-            timer.StartTimer(currenSecsPerRound);
+            timer.StartTimer((currenSecsPerRound < 6)? 6 : currenSecsPerRound);
     }
 
     void HighlightObject(GameObject target) {
@@ -90,8 +99,11 @@ public class DynamicGameManager : MonoBehaviour {
     void Calculate(Collider other) {
         if (other.gameObject == trenutni)
         {
-            if(timer)
+            if (timer)
+            {
                 currentHighScore += Mathf.FloorToInt(pointsPerObject * (timer.TimeLeft() / currenSecsPerRound));
+                ta.PlayEfx();
+            }
             NextTarget();
         }   
     }
@@ -142,7 +154,11 @@ public class DynamicGameManager : MonoBehaviour {
         for (int i = 0; i < inst.transform.childCount; i++) {
             namestajNaSceni.Add(inst.transform.GetChild(i).gameObject);
         }
+
+        float newTime = initialSpawnTime - currentHighScore / 15;
+        newTime = (newTime < 3f) ? 3f : newTime;
         
+        spawnTimer.StartTimer( newTime);
         
     }
 
@@ -155,12 +171,6 @@ public class DynamicGameManager : MonoBehaviour {
         Gizmos.DrawWireSphere(pos + new Vector3(0, 0, dimenzijaSobe.height), 0.5f);
     }
 
-    void Update() {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            UbaciUSobu();
-        }
-    }
 
 
     void OnTriggerExit(Collider other) {
