@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: 2e8302da3d4612f49855e477ce2c0fed
+timeCreated: 1481560815
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Cruiser Fortress Bevel Italic
+  fontNames:
+  - Cruiser Fortress Bevel Italic
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

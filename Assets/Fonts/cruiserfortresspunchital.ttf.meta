@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: 851716be5f06042469569cdb177ba995
+timeCreated: 1481560908
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Cruiser Fortress Punch Italic
+  fontNames:
+  - Cruiser Fortress Punch Italic
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
