@@ -32,6 +32,9 @@ public class Timer : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+        if (PauseManager.IsPaused()) {
+            return;
+        }
         timeLeft -= Time.deltaTime;
         
         if (timeLeft < 0) {
