@@ -15,13 +15,11 @@ public class PauseManager : Singleton<PauseManager> {
 
     void Update(){
         if (isGameOver) return;
-        if (!paused)
-        {
-            if (Input.GetKeyDown(KeyCode.Escape))
-            {
+        if (Input.GetKeyDown(KeyCode.Escape)) {
                 paused = !paused;
+            if (paused)
                 onPause.Invoke();
-            }
+            else onUnpause.Invoke();
         }
 	}
 

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class GameMenu : MonoBehaviour {
-
+    public Animator anim;
     float oldTImeScale;
 
 	// Use this for initialization
