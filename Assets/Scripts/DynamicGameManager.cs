@@ -54,7 +54,8 @@ public class DynamicGameManager : MonoBehaviour {
 
     void MakeTriggerArea() {
         Vector3 point = GetRandomPoint();
-        ta.transform.position = point; 
+        if(ta != null)
+            ta.transform.position = point; 
     }
 
     Vector3 GetRandomPoint() {
