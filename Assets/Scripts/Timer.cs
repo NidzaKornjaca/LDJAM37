@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Events;
 
 public class Timer : MonoBehaviour {
@@ -21,8 +19,8 @@ public class Timer : MonoBehaviour {
         timerOff.RemoveListener(action);
     }
 
-    void Start() {
-        gameObject.SetActive(false);
+    void Awake() {
+        timerOff = new UnityEvent();
     }
 
     public float TimeLeft() {

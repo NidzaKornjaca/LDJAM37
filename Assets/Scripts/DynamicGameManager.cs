@@ -10,8 +10,7 @@ public class DynamicGameManager : MonoBehaviour {
 
     public float secsPerRound = 30f;
     private float currenSecsPerRound;
-    public Timer timer;
-
+    private Timer timer;
     private static DynamicGameManager instance = null;
 
     public float forceMultiplier = 200f;
@@ -36,6 +35,7 @@ public class DynamicGameManager : MonoBehaviour {
     void Awake() {
         if (instance == null)
             instance = this;
+        timer = GetComponent<Timer>();
     }
 
 	// Use this for initialization
@@ -46,7 +46,8 @@ public class DynamicGameManager : MonoBehaviour {
         
         ta.Subscribe(Calculate);
 
-        timer.Subscribe(GameOver);
+        if(timer)
+            timer.Subscribe(GameOver);
 	}
 
     void NextTarget() {
@@ -57,7 +58,8 @@ public class DynamicGameManager : MonoBehaviour {
         trenutni = namestajNaSceni[Random.Range(0, namestajNaSceni.Count)];
         HighlightObject(trenutni);
         currenSecsPerRound = secsPerRound - currentHighScore / 30;
-        timer.StartTimer(currenSecsPerRound);
+        if(timer)
+            timer.StartTimer(currenSecsPerRound);
     }
 
     void HighlightObject(GameObject target) {
@@ -88,7 +90,8 @@ public class DynamicGameManager : MonoBehaviour {
     void Calculate(Collider other) {
         if (other.gameObject == trenutni)
         {
-            currentHighScore += Mathf.FloorToInt(pointsPerObject * (timer.TimeLeft() / currenSecsPerRound));
+            if(timer)
+                currentHighScore += Mathf.FloorToInt(pointsPerObject * (timer.TimeLeft() / currenSecsPerRound));
             NextTarget();
         }   
     }
