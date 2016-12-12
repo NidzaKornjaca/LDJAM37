@@ -4,6 +4,7 @@ using UnityEngine.Events;
 public class PauseManager : Singleton<PauseManager> {
 	private bool paused = false;
     private UnityEvent onPause, onUnpause;
+    private bool isGameOver = false;
 
     protected PauseManager() { }
 
@@ -13,11 +14,15 @@ public class PauseManager : Singleton<PauseManager> {
     }
 
     void Update(){
-		if(Input.GetKeyDown(KeyCode.Escape)){
-			paused = !paused;
-            if (paused) onPause.Invoke();
-            else onUnpause.Invoke();
-		}
+        if (isGameOver) return;
+        if (!paused)
+        {
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                paused = !paused;
+                onPause.Invoke();
+            }
+        }
 	}
 
     public static void SubscribeOnPause(UnityAction action) {
@@ -46,4 +51,9 @@ public class PauseManager : Singleton<PauseManager> {
         if (Instance.paused) Instance.onPause.Invoke();
         else Instance.onUnpause.Invoke();
     }
+
+    public static void setGameOver(bool val) {
+        Instance.isGameOver = val;
+    }
+
 }

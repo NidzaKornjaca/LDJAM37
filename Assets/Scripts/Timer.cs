@@ -50,6 +50,10 @@ public class Timer : MonoBehaviour {
         if (PauseManager.IsPaused()) {
             return;
         }
+
+        if (DynamicGameManager.IsGameOver())
+            return;
+
         timeLeft -= Time.deltaTime;
         if (timeLeft < currentCD) {
             countdown.Invoke();

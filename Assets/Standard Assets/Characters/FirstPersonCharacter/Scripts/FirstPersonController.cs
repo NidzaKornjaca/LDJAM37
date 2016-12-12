@@ -67,6 +67,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
                 return;
             }
 
+          
             RotateView();
             // the jump state needs to read here to make sure it is not missed
             if (!m_Jump)
@@ -104,6 +105,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
             {
                 return;
             }
+           
 
             float speed;
             GetInput(out speed);

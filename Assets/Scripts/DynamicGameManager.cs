@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
-
+using UnityStandardAssets.Characters.FirstPerson;
 public class DynamicGameManager : MonoBehaviour {
+
+    private bool isGameOver = false;
 
     private int currentHighScore = 0;
     public int pointsPerObject = 20;
@@ -35,14 +37,20 @@ public class DynamicGameManager : MonoBehaviour {
     private Shader previousShader;
     private GameObject highlightParticles;
 
+    private UnityEvent gameOver;
+
     void Awake() {
         if (instance == null)
             instance = this;
         timer = GetComponent<Timer>();
+        gameOver = new UnityEvent();
     }
 
 	// Use this for initialization
 	void Start () {
+
+        PauseManager.setGameOver(false);
+
         ta = Instantiate(taPrefab, Vector3.zero, Quaternion.identity);
 
         NextTarget();
@@ -205,7 +213,18 @@ public class DynamicGameManager : MonoBehaviour {
 
     public void GameOver() {
         Debug.Log(currentHighScore);
-        PauseManager.TogglePause();
+        FindObjectOfType<FirstPersonController>().GetComponent<FirstPersonController>().enabled = false;
+        gameOver.Invoke();
+        PauseManager.setGameOver(true);
+        Time.timeScale = 0;
         return;
+    }
+
+    public static void Subscribe(UnityAction action) {
+        instance.gameOver.AddListener(action);
+    }
+
+    public static bool IsGameOver() {
+        return instance.isGameOver;
     }
 }
