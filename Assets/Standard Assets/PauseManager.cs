@@ -1,14 +1,16 @@
 ﻿using UnityEngine;
 using UnityEngine.Events;
 
-public class PauseManager : Singleton<PauseManager> {
+public class PauseManager : MonoBehaviour {
 	private bool paused = false;
     private UnityEvent onPause, onUnpause;
     private bool isGameOver = false;
+    private static PauseManager Instance;
 
     protected PauseManager() { }
 
     void Awake() {
+        if (!Instance) Instance = this;
         if (onPause == null) onPause = new UnityEvent();
         if (onUnpause == null) onUnpause = new UnityEvent();
     }
@@ -52,7 +54,12 @@ public class PauseManager : Singleton<PauseManager> {
     }
 
     public static void setGameOver(bool val) {
-        Instance.isGameOver = val;
+        if(Instance)
+            Instance.isGameOver = val;
     }
 
+    public static bool IsGameOver() {
+        if (!Instance) return false;
+        return Instance.isGameOver;
+    }
 }

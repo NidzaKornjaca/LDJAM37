@@ -218,9 +218,9 @@ public class DynamicGameManager : MonoBehaviour {
     public void GameOver() {
         isGameOver = true;
         Debug.Log(currentHighScore);
-        FindObjectOfType<FirstPersonController>().GetComponent<FirstPersonController>().enabled = false;
-        gameOver.Invoke();
+        //FindObjectOfType<FirstPersonController>().GetComponent<FirstPersonController>().enabled = false;
         PauseManager.setGameOver(true);
+        gameOver.Invoke();
         Time.timeScale = 0;
         return;
     }
