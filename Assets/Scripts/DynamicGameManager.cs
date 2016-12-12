@@ -69,9 +69,9 @@ public class DynamicGameManager : MonoBehaviour {
 
     void NextTarget() {
         _NextTarget();
-        currenSecsPerRound = secsPerRound - currentHighScore / 30;
+        currenSecsPerRound = secsPerRound - currentHighScore / 100;
         if(timer)
-            timer.StartTimer((currenSecsPerRound < 6)? 6 : currenSecsPerRound);
+            timer.StartTimer((currenSecsPerRound < 12)? 12 : currenSecsPerRound);
     }
 
     void _NextTarget() {
@@ -113,7 +113,7 @@ public class DynamicGameManager : MonoBehaviour {
         {
             if (timer)
             {
-                currentHighScore += Mathf.FloorToInt(pointsPerObject * (timer.TimeLeft() / currenSecsPerRound));
+                currentHighScore += Mathf.FloorToInt(pointsPerObject * (0.5f + timer.TimeLeft() / currenSecsPerRound));
                 ta.PlayEfx();
             }
             NextTarget();
