@@ -68,15 +68,19 @@ public class DynamicGameManager : MonoBehaviour {
 
 
     void NextTarget() {
+        _NextTarget();
+        currenSecsPerRound = secsPerRound - currentHighScore / 30;
+        if(timer)
+            timer.StartTimer((currenSecsPerRound < 6)? 6 : currenSecsPerRound);
+    }
+
+    void _NextTarget() {
         MakeTriggerArea();
         UnhighlightObject(trenutni);
         if (namestajNaSceni.Count == 0)
             return;
         trenutni = namestajNaSceni[Random.Range(0, namestajNaSceni.Count)];
         HighlightObject(trenutni);
-        currenSecsPerRound = secsPerRound - currentHighScore / 30;
-        if(timer)
-            timer.StartTimer((currenSecsPerRound < 6)? 6 : currenSecsPerRound);
     }
 
     void HighlightObject(GameObject target) {
@@ -203,7 +207,7 @@ public class DynamicGameManager : MonoBehaviour {
         }
         if (instance.trenutni == other) {
             instance.trenutni = null;
-            instance.NextTarget();
+            instance._NextTarget();
         }
     }
 
