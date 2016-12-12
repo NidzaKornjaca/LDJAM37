@@ -21,6 +21,11 @@ public class DynamicGameManager : MonoBehaviour {
     public List<GameObject> namestajNaSceni;
     public GameObject trenutni;
 
+    public GameObject highlightParticlePrefab;
+
+    private Shader previousShader;
+    private GameObject highlightParticles;
+
     void Awake() {
         if (instance == null)
             instance = this;
@@ -37,16 +42,41 @@ public class DynamicGameManager : MonoBehaviour {
 
     void NextTarget() {
         MakeTriggerArea();
+        UnhighlightObject(trenutni);
         if (namestajNaSceni.Count == 0)
             return;
         trenutni = namestajNaSceni[Random.Range(0, namestajNaSceni.Count)];
-        
+        HighlightObject(trenutni);
+    }
+
+    void HighlightObject(GameObject target) {
+        if (!target) return;
+        previousShader = target.GetComponent<Renderer>().material.shader;
+        HoverHighlighter hh = target.GetComponent<HoverHighlighter>();
+        if (highlightParticlePrefab) {
+            highlightParticles = Instantiate(highlightParticlePrefab, target.transform.position, Quaternion.identity);
+            highlightParticles.transform.SetParent(target.transform);
+            highlightParticles.transform.localScale = new Vector3(1, 1, 1);
+        }
+        if (hh) hh.nonStandard = true;
+        Renderer ren = target.GetComponent<Renderer>();
+        if (ren)
+            ren.material.shader = Shader.Find("GUI/Text Shader");
+    }
+
+    void UnhighlightObject(GameObject target) {
+        if (!target) return;
+        HoverHighlighter hh = target.GetComponent<HoverHighlighter>();
+        if (highlightParticles) Destroy(highlightParticles);
+        if (hh) hh.nonStandard = false;
+        Renderer ren = target.GetComponent<Renderer>();
+        if (ren)
+            ren.material.shader = previousShader;
     }
 
     void Calculate(Collider other) {
         if (other.gameObject == trenutni)
         {
-            trenutni = null;
             NextTarget();
         }   
     }
