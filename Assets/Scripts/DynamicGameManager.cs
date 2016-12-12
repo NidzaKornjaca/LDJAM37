@@ -190,6 +190,7 @@ public class DynamicGameManager : MonoBehaviour {
     }
 
     public void GameOver() {
+        Debug.Log(currentHighScore);
         PauseManager.TogglePause();
         return;
     }
