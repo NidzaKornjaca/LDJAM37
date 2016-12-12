@@ -28,6 +28,8 @@ public class DynamicGameManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+        ta = Instantiate(taPrefab, Vector3.zero, Quaternion.identity);
+
         NextTarget();
         
         ta.Subscribe(Calculate);
@@ -51,11 +53,8 @@ public class DynamicGameManager : MonoBehaviour {
 
 
     void MakeTriggerArea() {
-        if (ta != null) {
-            Destroy(ta);    
-        }
         Vector3 point = GetRandomPoint();
-        ta = Instantiate(taPrefab, point, Quaternion.identity);
+        ta.transform.position = point; 
     }
 
     Vector3 GetRandomPoint() {
@@ -119,7 +118,7 @@ public class DynamicGameManager : MonoBehaviour {
 
 
     void OnTriggerExit(Collider other) {
-        Destroy(other);
+        Destroy(other.gameObject);
     }
 
 
@@ -129,6 +128,7 @@ public class DynamicGameManager : MonoBehaviour {
     }
 
     public static void IspisiSe(GameObject other) {
+        Debug.Log("Trenutno se unistava");
         for (int i = 0; i < instance.namestajNaSceni.Count; i++)
         {
             if (other == instance.namestajNaSceni[i])

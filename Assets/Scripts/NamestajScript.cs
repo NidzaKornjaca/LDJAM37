@@ -10,7 +10,7 @@ public class NamestajScript : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void OnDestory () {
+	void OnDestroy () {
         DynamicGameManager.IspisiSe(this.gameObject);
     }
 }
