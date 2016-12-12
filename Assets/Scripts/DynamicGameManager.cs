@@ -5,6 +5,13 @@ using UnityEngine.Events;
 
 public class DynamicGameManager : MonoBehaviour {
 
+    private int currentHighScore = 0;
+    public int pointsPerObject = 20;
+
+    public float secsPerRound = 30f;
+    private float currenSecsPerRound;
+    public Timer timer;
+
     private static DynamicGameManager instance = null;
 
     public float forceMultiplier = 200f;
@@ -38,6 +45,8 @@ public class DynamicGameManager : MonoBehaviour {
         NextTarget();
         
         ta.Subscribe(Calculate);
+
+        timer.Subscribe(GameOver);
 	}
 
     void NextTarget() {
@@ -47,6 +56,8 @@ public class DynamicGameManager : MonoBehaviour {
             return;
         trenutni = namestajNaSceni[Random.Range(0, namestajNaSceni.Count)];
         HighlightObject(trenutni);
+        currenSecsPerRound = secsPerRound - currentHighScore / 30;
+        timer.StartTimer(currenSecsPerRound);
     }
 
     void HighlightObject(GameObject target) {
@@ -77,6 +88,7 @@ public class DynamicGameManager : MonoBehaviour {
     void Calculate(Collider other) {
         if (other.gameObject == trenutni)
         {
+            currentHighScore += Mathf.FloorToInt(pointsPerObject * (timer.TimeLeft() / currenSecsPerRound));
             NextTarget();
         }   
     }
@@ -174,5 +186,8 @@ public class DynamicGameManager : MonoBehaviour {
         }
     }
 
-
+    public void GameOver() {
+        PauseManager.TogglePause();
+        return;
+    }
 }

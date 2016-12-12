@@ -8,7 +8,7 @@ public class Timer : MonoBehaviour {
     float timeLeft;
     private UnityEvent timerOff;
 
-    void StartTimer(float time) {
+    public void StartTimer(float time) {
         timeLeft = time;
         gameObject.SetActive(true);
     }
@@ -23,6 +23,10 @@ public class Timer : MonoBehaviour {
 
     void Start() {
         gameObject.SetActive(false);
+    }
+
+    public float TimeLeft() {
+        return timeLeft;
     }
 	
 	// Update is called once per frame
