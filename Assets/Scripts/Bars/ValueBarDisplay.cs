@@ -11,7 +11,6 @@
         private Transform m_backgroundBar;
         [SerializeField]
         private float m_scaleSpeed = 1;
-         
         private Vector3 m_baseScale;
 
         //private int test = 5;

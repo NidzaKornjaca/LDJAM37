@@ -10,7 +10,7 @@ public class DynamicGameManager : MonoBehaviour {
 
     public float secsPerRound = 30f;
     private float currenSecsPerRound;
-    private Timer timer;
+    public Timer timer;
     [SerializeField]
     private Timer spawnTimer;
     public float initialSpawnTime = 30f;
@@ -197,6 +197,10 @@ public class DynamicGameManager : MonoBehaviour {
             instance.trenutni = null;
             instance.NextTarget();
         }
+    }
+
+    public static Timer getTimer() {
+        return instance.timer;
     }
 
     public void GameOver() {

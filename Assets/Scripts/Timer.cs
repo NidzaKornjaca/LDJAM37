@@ -8,10 +8,14 @@ public class Timer : MonoBehaviour {
     float maxTime;
     float timeLeft;
     private UnityEvent timerOff;
+    private UnityEvent countdown;
+    private int countodownStartAt = 5;
+    private int currentCD;
 
     public void StartTimer(float time) {
         maxTime = time;
         timeLeft = time;
+        currentCD = countodownStartAt; 
     }
 
     public void Subscribe(UnityAction action) {
@@ -22,8 +26,19 @@ public class Timer : MonoBehaviour {
         timerOff.RemoveListener(action);
     }
 
+    public void SubscribeCountdown(UnityAction action)
+    {
+        countdown.AddListener(action);
+    }
+
+    public void UnsubscribeCountdown(UnityAction action)
+    {
+        countdown.RemoveListener(action);
+    }
+
     void Awake() {
         timerOff = new UnityEvent();
+        countdown = new UnityEvent();
     }
 
     public float TimeLeft() {
@@ -36,7 +51,10 @@ public class Timer : MonoBehaviour {
             return;
         }
         timeLeft -= Time.deltaTime;
-        
+        if (timeLeft < currentCD) {
+            countdown.Invoke();
+            currentCD--;
+        }
         if (timeLeft < 0) {
             timerOff.Invoke();
             if (timeBar != null) timeBar.Set(0f);
