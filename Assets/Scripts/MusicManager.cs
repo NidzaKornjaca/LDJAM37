@@ -6,7 +6,7 @@ public class MusicManager : Singleton<MusicManager> {
     private AudioSource audioSource;
     private float baseVolume;
     private float targetVolume;
-    private bool done = false;
+    private bool done = true;
 
     protected MusicManager() { }
 
@@ -20,6 +20,7 @@ public class MusicManager : Singleton<MusicManager> {
     }
     
     public static void Fade(AudioClip music, float volume = 1.0f, bool loop = false) {
+        if (!Instance.done) return;
         Instance.targetVolume = Instance.baseVolume * volume;
         Instance.audioSource.loop = loop;
         Instance.FadeTo(music);
@@ -41,7 +42,7 @@ public class MusicManager : Singleton<MusicManager> {
     private IEnumerator FadeOut() {
         done = false;
         while(audioSource.volume > 0.01) {
-            audioSource.volume = Mathf.Clamp(Mathf.Lerp(audioSource.volume, 0, 5 * Time.deltaTime), 0, 1);
+            audioSource.volume = Mathf.Clamp(Mathf.Lerp(audioSource.volume, 0, 10 * Time.deltaTime), 0, 1);
             yield return new WaitForEndOfFrame();
         }
         done = true;
@@ -51,7 +52,7 @@ public class MusicManager : Singleton<MusicManager> {
         done = false;
         float initial = audioSource.volume;
         while (audioSource.volume < targetVolume) {
-            audioSource.volume = Mathf.Lerp(audioSource.volume, targetVolume + 0.1f*targetVolume , 5 * Time.deltaTime);
+            audioSource.volume = Mathf.Lerp(audioSource.volume, targetVolume + 0.1f*targetVolume , 10 * Time.deltaTime);
             yield return new WaitForEndOfFrame();
         }
         done = true;
